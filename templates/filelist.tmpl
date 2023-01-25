@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ .curFolder }}</title>
+</head>
+<html>
+	<h3>
+		{{ .curFolderAbs }}
+	</h3>
+
+    <ul>    
+    {{range  .files}}
+    <li>
+        {{ if .IsDir }}
+            <a href="?folder= {{- .Name -}}">[Dir]{{ .Name }}</a>
+        {{ else }}
+            <a href="/static/{{- .Name -}}">{{ .Name }}</a>
+        {{ end }}
+    </li>
+    {{end}}
+    </ul>
+</html>

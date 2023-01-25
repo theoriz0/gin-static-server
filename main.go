@@ -2,15 +2,21 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
+	"os"
 	"path/filepath"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
+
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
-	router.Static("/", "./")
+	router.LoadHTMLGlob("templates/*")
+	router.GET("/", listFiles)
+	router.Static("/static", "./")
+
 	absPath, _ := filepath.Abs("./")
 	fmt.Printf("Serving %s\n", absPath)
 
@@ -32,4 +38,24 @@ func main() {
 
 func portToAddr(port int) string {
 	return ":" + strconv.FormatInt(int64(port), 10)
+}
+
+func listFiles(ctx *gin.Context) {
+	folder, ok := ctx.GetQuery("folder")
+	if !ok {
+		folder = "."
+	}
+	files, err := os.ReadDir(folder)
+	absPath, err := filepath.Abs(folder)
+	if err != nil {
+		ctx.Writer.WriteString(err.Error())
+		ctx.Writer.Flush()
+		return
+	}
+	ctx.HTML(200, "filelist.tmpl", gin.H{
+		"curFolder": folder,
+		"curFolderAbs": absPath,
+		"files": files,
+	})
+	ctx.Writer.Flush()
 }
