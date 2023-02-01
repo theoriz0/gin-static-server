@@ -31,7 +31,7 @@ func main() {
 	port := 8080
 	// Listen and serve on 0.0.0.0:8080
 	addr := portToAddr(port)
-	fmt.Printf("Port %v", port)
+	fmt.Printf("At Port %v\n", port)
 	err := router.Run(addr)
 	for {
 		if err != nil {
