@@ -1,7 +1,9 @@
 package main
 
 import (
+	"embed"
 	"fmt"
+	"html/template"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -9,11 +11,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var (
+	//go:embed templates/*
+	files embed.FS
+)
+
 func main() {
 
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
-	router.LoadHTMLGlob("templates/*")
+	templ := template.Must(template.New("").ParseFS(files, "templates/*.tmpl"))
+	router.SetHTMLTemplate(templ)
 	router.GET("/", listFiles)
 	router.Static("/static", "./")
 
@@ -53,9 +61,9 @@ func listFiles(ctx *gin.Context) {
 		return
 	}
 	ctx.HTML(200, "filelist.tmpl", gin.H{
-		"curFolder": folder,
+		"curFolder":    folder,
 		"curFolderAbs": absPath,
-		"files": files,
+		"files":        files,
 	})
 	ctx.Writer.Flush()
 }
