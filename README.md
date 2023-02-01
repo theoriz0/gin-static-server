@@ -16,14 +16,14 @@ For example in Windows:
 
 Then visit ip:port according to the output
 
-```
+```bash
 >> Serving {the folder served}
 >> Port 8080
 ```
 
 If the port is used by other program, it will auto-retry display the port tried to use and the final port used.
 
-```
+```bash
 >> Serving {the folder served}
 >> Port 8080 Failed
 >> Port 8081
