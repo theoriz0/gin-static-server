@@ -37,7 +37,7 @@ func main() {
 		if err != nil {
 			fmt.Print(" failed\n")
 			port += 1
-			fmt.Printf("Port %v", port)
+			fmt.Printf("Port %v\n", port)
 			addr := portToAddr(port)
 			err = router.Run(addr)
 		}
